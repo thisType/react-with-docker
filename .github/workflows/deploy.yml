@@ -9,14 +9,21 @@ env:
   MONGODB_DB_NAME: gha-demo
 jobs:
   test:
-    environment: testing
     runs-on: ubuntu-latest
+    container:
+      image: node:18
     env:
-      MONGODB_CONNECTION_PROTOCOL: mongodb+srv
-      MONGODB_CLUSTER_ADDRESS: cluster0.ntrwp.mongodb.net
-      MONGODB_USERNAME: ${{ secrets.MONGODB_USERNAME }}
-      MONGODB_PASSWORD: ${{ secrets.MONGODB_PASSWORD }}
+      MONGODB_CONNECTION_PROTOCOL: mongodb
+      MONGODB_CLUSTER_ADDRESS: mongo
+      MONGODB_USERNAME: root
+      MONGODB_PASSWORD:  root.user
       PORT: 8080
+    services:
+      mongo:
+        image: mongo:5.0
+        env:
+          MONGO_INITDB_ROOT_USERNAME: root
+          MONGO_INITDB_ROOT_PASSWORD: root.user
     steps:
       - name: Get Code
         uses: actions/checkout@v3
